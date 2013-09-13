@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cartopy &mdash; cartopy 0.8.0 documentation</title>
+    <title>cartopy &mdash; cartopy 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.8.0',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="cartopy 0.8.0 documentation" href="index.html" />
+    <link rel="top" title="cartopy 0.9.0 documentation" href="index.html" />
     <link rel="next" title="Coordinate reference systems in Cartopy" href="crs/index.html" />
     <link rel="prev" title="Citing cartopy" href="citation.html" />
  
@@ -82,6 +82,7 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <li><a class="reference internal" href="#cartopy-io-shapereader">cartopy.io.shapereader</a></li>
 <li><a class="reference internal" href="#cartopy-io-srtm">cartopy.io.srtm</a></li>
 <li><a class="reference internal" href="#cartopy-mpl">cartopy.mpl</a></li>
+<li><a class="reference internal" href="#cartopy-mpl-clip-path">cartopy.mpl.clip_path</a></li>
 <li><a class="reference internal" href="#cartopy-mpl-feature-artist">cartopy.mpl.feature_artist</a></li>
 <li><a class="reference internal" href="#cartopy-mpl-geoaxes">cartopy.mpl.geoaxes</a></li>
 <li><a class="reference internal" href="#cartopy-mpl-gridliner">cartopy.mpl.gridliner</a></li>
@@ -153,26 +154,31 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <tr class="row-even"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.OSGB" title="cartopy.crs.OSGB"><tt class="xref py py-obj docutils literal"><span class="pre">OSGB</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.OSNI" title="cartopy.crs.OSNI"><tt class="xref py py-obj docutils literal"><span class="pre">OSNI</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.EuroPP" title="cartopy.crs.EuroPP"><tt class="xref py py-obj docutils literal"><span class="pre">EuroPP</span></tt></a></td>
-<td><a class="reference internal" href="crs/projections.html#cartopy.crs.Gnomonic" title="cartopy.crs.Gnomonic"><tt class="xref py py-obj docutils literal"><span class="pre">Gnomonic</span></tt></a></td>
+<td><a class="reference internal" href="crs/projections.html#cartopy.crs.Geostationary" title="cartopy.crs.Geostationary"><tt class="xref py py-obj docutils literal"><span class="pre">Geostationary</span></tt></a></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.InterruptedGoodeHomolosine" title="cartopy.crs.InterruptedGoodeHomolosine"><tt class="xref py py-obj docutils literal"><span class="pre">InterruptedGoodeHomolosine</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.Gnomonic" title="cartopy.crs.Gnomonic"><tt class="xref py py-obj docutils literal"><span class="pre">Gnomonic</span></tt></a></td>
+<td><a class="reference internal" href="crs/projections.html#cartopy.crs.InterruptedGoodeHomolosine" title="cartopy.crs.InterruptedGoodeHomolosine"><tt class="xref py py-obj docutils literal"><span class="pre">InterruptedGoodeHomolosine</span></tt></a></td>
+<td><a class="reference internal" href="crs/projections.html#cartopy.crs.LambertConformal" title="cartopy.crs.LambertConformal"><tt class="xref py py-obj docutils literal"><span class="pre">LambertConformal</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.LambertCylindrical" title="cartopy.crs.LambertCylindrical"><tt class="xref py py-obj docutils literal"><span class="pre">LambertCylindrical</span></tt></a></td>
-<td><a class="reference internal" href="crs/projections.html#cartopy.crs.Mercator" title="cartopy.crs.Mercator"><tt class="xref py py-obj docutils literal"><span class="pre">Mercator</span></tt></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.Mercator" title="cartopy.crs.Mercator"><tt class="xref py py-obj docutils literal"><span class="pre">Mercator</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.Miller" title="cartopy.crs.Miller"><tt class="xref py py-obj docutils literal"><span class="pre">Miller</span></tt></a></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.Mollweide" title="cartopy.crs.Mollweide"><tt class="xref py py-obj docutils literal"><span class="pre">Mollweide</span></tt></a></td>
+<td><a class="reference internal" href="crs/projections.html#cartopy.crs.Mollweide" title="cartopy.crs.Mollweide"><tt class="xref py py-obj docutils literal"><span class="pre">Mollweide</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.NorthPolarStereo" title="cartopy.crs.NorthPolarStereo"><tt class="xref py py-obj docutils literal"><span class="pre">NorthPolarStereo</span></tt></a></td>
-<td><a class="reference internal" href="crs/projections.html#cartopy.crs.Orthographic" title="cartopy.crs.Orthographic"><tt class="xref py py-obj docutils literal"><span class="pre">Orthographic</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.Orthographic" title="cartopy.crs.Orthographic"><tt class="xref py py-obj docutils literal"><span class="pre">Orthographic</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.PlateCarree" title="cartopy.crs.PlateCarree"><tt class="xref py py-obj docutils literal"><span class="pre">PlateCarree</span></tt></a></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="crs/index.html#cartopy.crs.Projection" title="cartopy.crs.Projection"><tt class="xref py py-obj docutils literal"><span class="pre">Projection</span></tt></a></td>
+<td><a class="reference internal" href="crs/index.html#cartopy.crs.Projection" title="cartopy.crs.Projection"><tt class="xref py py-obj docutils literal"><span class="pre">Projection</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.Robinson" title="cartopy.crs.Robinson"><tt class="xref py py-obj docutils literal"><span class="pre">Robinson</span></tt></a></td>
-<td><a class="reference internal" href="crs/projections.html#cartopy.crs.RotatedPole" title="cartopy.crs.RotatedPole"><tt class="xref py py-obj docutils literal"><span class="pre">RotatedPole</span></tt></a></td>
-<td><a class="reference internal" href="crs/projections.html#cartopy.crs.SouthPolarStereo" title="cartopy.crs.SouthPolarStereo"><tt class="xref py py-obj docutils literal"><span class="pre">SouthPolarStereo</span></tt></a></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.Stereographic" title="cartopy.crs.Stereographic"><tt class="xref py py-obj docutils literal"><span class="pre">Stereographic</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="crs/projections.html#cartopy.crs.RotatedPole" title="cartopy.crs.RotatedPole"><tt class="xref py py-obj docutils literal"><span class="pre">RotatedPole</span></tt></a></td>
+<td><a class="reference internal" href="crs/projections.html#cartopy.crs.SouthPolarStereo" title="cartopy.crs.SouthPolarStereo"><tt class="xref py py-obj docutils literal"><span class="pre">SouthPolarStereo</span></tt></a></td>
+<td><a class="reference internal" href="crs/projections.html#cartopy.crs.Stereographic" title="cartopy.crs.Stereographic"><tt class="xref py py-obj docutils literal"><span class="pre">Stereographic</span></tt></a></td>
 <td><a class="reference internal" href="crs/projections.html#cartopy.crs.TransverseMercator" title="cartopy.crs.TransverseMercator"><tt class="xref py py-obj docutils literal"><span class="pre">TransverseMercator</span></tt></a></td>
-<td><a class="reference internal" href="crs/index.html#cartopy.crs.RotatedGeodetic" title="cartopy.crs.RotatedGeodetic"><tt class="xref py py-obj docutils literal"><span class="pre">RotatedGeodetic</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="crs/index.html#cartopy.crs.RotatedGeodetic" title="cartopy.crs.RotatedGeodetic"><tt class="xref py py-obj docutils literal"><span class="pre">RotatedGeodetic</span></tt></a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
 </tbody>
@@ -331,6 +337,29 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <div class="section" id="cartopy-mpl">
 <h1>cartopy.mpl<a class="headerlink" href="#cartopy-mpl" title="Permalink to this headline">¶</a></h1>
 </div>
+<div class="section" id="cartopy-mpl-clip-path">
+<h1>cartopy.mpl.clip_path<a class="headerlink" href="#cartopy-mpl-clip-path" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">bbox_to_path</span></tt></td>
+<td><tt class="xref py py-obj docutils literal"><span class="pre">clip_path</span></tt></td>
+<td><tt class="xref py py-obj docutils literal"><span class="pre">clip_path_python</span></tt></td>
+<td><tt class="xref py py-obj docutils literal"><span class="pre">intersection_point</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">lines_intersect</span></tt></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="cartopy-mpl-feature-artist">
 <h1>cartopy.mpl.feature_artist<a class="headerlink" href="#cartopy-mpl-feature-artist" title="Permalink to this headline">¶</a></h1>
 <table border="1" class="docutils">
@@ -347,14 +376,12 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <h1>cartopy.mpl.geoaxes<a class="headerlink" href="#cartopy-mpl-geoaxes" title="Permalink to this headline">¶</a></h1>
 <table border="1" class="docutils">
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="matplotlib/geoaxes.html#cartopy.mpl.geoaxes.GeoAxes" title="cartopy.mpl.geoaxes.GeoAxes"><tt class="xref py py-obj docutils literal"><span class="pre">GeoAxes</span></tt></a></td>
 <td><tt class="xref py py-obj docutils literal"><span class="pre">InterProjectionTransform</span></tt></td>
-<td><tt class="xref py py-obj docutils literal"><span class="pre">SimpleClippedTransform</span></tt></td>
 </tr>
 </tbody>
 </table>

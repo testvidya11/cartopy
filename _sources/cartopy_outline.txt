@@ -18,11 +18,12 @@ cartopy.crs
 
 
 	:py:obj:`CRS`, :py:obj:`Geocentric`, :py:obj:`Geodetic`, :py:obj:`Globe`
-	:py:obj:`OSGB`, :py:obj:`OSNI`, :py:obj:`EuroPP`, :py:obj:`Gnomonic`
-	:py:obj:`InterruptedGoodeHomolosine`, :py:obj:`LambertCylindrical`, :py:obj:`Mercator`, :py:obj:`Miller`
-	:py:obj:`Mollweide`, :py:obj:`NorthPolarStereo`, :py:obj:`Orthographic`, :py:obj:`PlateCarree`
-	:py:obj:`Projection`, :py:obj:`Robinson`, :py:obj:`RotatedPole`, :py:obj:`SouthPolarStereo`
-	:py:obj:`Stereographic`, :py:obj:`TransverseMercator`, :py:obj:`RotatedGeodetic`
+	:py:obj:`OSGB`, :py:obj:`OSNI`, :py:obj:`EuroPP`, :py:obj:`Geostationary`
+	:py:obj:`Gnomonic`, :py:obj:`InterruptedGoodeHomolosine`, :py:obj:`LambertConformal`, :py:obj:`LambertCylindrical`
+	:py:obj:`Mercator`, :py:obj:`Miller`, :py:obj:`Mollweide`, :py:obj:`NorthPolarStereo`
+	:py:obj:`Orthographic`, :py:obj:`PlateCarree`, :py:obj:`Projection`, :py:obj:`Robinson`
+	:py:obj:`RotatedPole`, :py:obj:`SouthPolarStereo`, :py:obj:`Stereographic`, :py:obj:`TransverseMercator`
+	:py:obj:`RotatedGeodetic`
 
 cartopy.feature
 ***************
@@ -115,6 +116,17 @@ cartopy.mpl
 
 
 
+cartopy.mpl.clip_path
+*********************
+
+.. currentmodule:: cartopy.mpl.clip_path
+
+.. csv-table::
+
+
+	:py:obj:`bbox_to_path`, :py:obj:`clip_path`, :py:obj:`clip_path_python`, :py:obj:`intersection_point`
+	:py:obj:`lines_intersect`
+
 cartopy.mpl.feature_artist
 **************************
 
@@ -133,7 +145,7 @@ cartopy.mpl.geoaxes
 .. csv-table::
 
 
-	:py:obj:`GeoAxes`, :py:obj:`InterProjectionTransform`, :py:obj:`SimpleClippedTransform`
+	:py:obj:`GeoAxes`, :py:obj:`InterProjectionTransform`
 
 cartopy.mpl.gridliner
 *********************

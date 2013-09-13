@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>More advanced mapping with cartopy and matplotlib &mdash; cartopy 0.8.0 documentation</title>
+    <title>More advanced mapping with cartopy and matplotlib &mdash; cartopy 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.8.0',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="cartopy 0.8.0 documentation" href="../index.html" />
+    <link rel="top" title="cartopy 0.9.0 documentation" href="../index.html" />
     <link rel="up" title="Using cartopy with matplotlib" href="intro.html" />
     <link rel="next" title="Cartopy matplotlib integration reference document" href="geoaxes.html" />
     <link rel="prev" title="Using cartopy with matplotlib" href="intro.html" />
@@ -122,10 +122,10 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <p>From the outset, cartopy&#8217;s purpose has been to simplify and improve the quality of
 mapping visualisations available for scientific data. Thanks to the simplicity of the cartopy
 interface, in many cases the hardest part of producing such visualisations is getting
-hold of the data in the first place. To address this, a Python package, 
-<a class="reference external" href="http://scitools.org.uk/iris/">Iris</a>, has been created to make loading and saving data from a 
-variety of gridded datasets easier. Some of the following examples make use of the Iris 
-loading capabilities, while others use the netCDF4 Python package so as to show a range 
+hold of the data in the first place. To address this, a Python package,
+<a class="reference external" href="http://scitools.org.uk/iris/">Iris</a>, has been created to make loading and saving data from a
+variety of gridded datasets easier. Some of the following examples make use of the Iris
+loading capabilities, while others use the netCDF4 Python package so as to show a range
 of different approaches to data loading.</p>
 <div class="section" id="contour-plots">
 <h2>Contour plots<a class="headerlink" href="#contour-plots" title="Permalink to this headline">¶</a></h2>
@@ -234,8 +234,8 @@ of different approaches to data loading.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="s">&#39;50m&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c"># mark a known place to help us geo-locate ourselves</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="mf">117.1625</span><span class="p">,</span> <span class="mf">32.715</span><span class="p">,</span> <span class="s">&#39;bo&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">117</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="s">&#39;San Diego&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="mf">117.1625</span><span class="p">,</span> <span class="mf">32.715</span><span class="p">,</span> <span class="s">&#39;bo&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">Geodetic</span><span class="p">())</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">117</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="s">&#39;San Diego&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">Geodetic</span><span class="p">())</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>

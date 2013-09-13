@@ -32,6 +32,22 @@ PlateCarree
     ax.gridlines()
 
 
+LambertConformal
+----------------
+
+.. autoclass:: cartopy.crs.LambertConformal
+
+.. plot::
+
+    import matplotlib.pyplot as plt
+    import cartopy.crs as ccrs
+
+    plt.figure(figsize=(4.28969332205, 3))
+    ax = plt.axes(projection=ccrs.LambertConformal())
+    ax.coastlines(resolution='110m')
+    ax.gridlines()
+
+
 LambertCylindrical
 ------------------
 
@@ -58,7 +74,7 @@ Mercator
     import matplotlib.pyplot as plt
     import cartopy.crs as ccrs
 
-    plt.figure(figsize=(3, 3))
+    plt.figure(figsize=(3.50907018473, 3))
     ax = plt.axes(projection=ccrs.Mercator())
     ax.coastlines(resolution='110m')
     ax.gridlines()
@@ -154,7 +170,7 @@ TransverseMercator
     import matplotlib.pyplot as plt
     import cartopy.crs as ccrs
 
-    plt.figure(figsize=(6, 3))
+    plt.figure(figsize=(6.0, 3))
     ax = plt.axes(projection=ccrs.TransverseMercator())
     ax.coastlines(resolution='110m')
     ax.gridlines()
@@ -224,6 +240,22 @@ EuroPP
     ax.gridlines()
 
 
+Geostationary
+-------------
+
+.. autoclass:: cartopy.crs.Geostationary
+
+.. plot::
+
+    import matplotlib.pyplot as plt
+    import cartopy.crs as ccrs
+
+    plt.figure(figsize=(2.99893683337, 3))
+    ax = plt.axes(projection=ccrs.Geostationary())
+    ax.coastlines(resolution='110m')
+    ax.gridlines()
+
+
 Gnomonic
 --------
 
@@ -286,3 +318,5 @@ SouthPolarStereo
     ax = plt.axes(projection=ccrs.SouthPolarStereo())
     ax.coastlines(resolution='110m')
     ax.gridlines()
+
+

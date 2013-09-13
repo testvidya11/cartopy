@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Coordinate reference systems in Cartopy &mdash; cartopy 0.8.0 documentation</title>
+    <title>Coordinate reference systems in Cartopy &mdash; cartopy 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.8.0',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="cartopy 0.8.0 documentation" href="../index.html" />
+    <link rel="top" title="cartopy 0.9.0 documentation" href="../index.html" />
     <link rel="next" title="Cartopy projection list" href="projections.html" />
     <link rel="prev" title="cartopy" href="../cartopy_outline.html" />
  
@@ -113,32 +113,26 @@ the interface described below.</p>
 <dt id="cartopy.crs.CRS">
 <em class="property">class </em><tt class="descclassname">cartopy.crs.</tt><tt class="descname">CRS</tt><big>(</big><em>proj4_params</em>, <em>globe=None</em><big>)</big><a class="headerlink" href="#cartopy.crs.CRS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a Coordinate Reference System using proj.4.</p>
-<p>Args:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>proj4_params</strong> : iterable of key-value pairs</p>
 <blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>proj4_params - A dictionary of proj4 valid parameters</dt>
-<dd><p class="first last">required to define the desired CRS.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<div><p>The proj4 parameters required to define the desired CRS.
+The parameters should not describe the desired elliptic model,
+instead create an appropriate Globe instance. The <tt class="docutils literal"><span class="pre">proj4_params</span></tt>
+parameters will override any parameters that the Globe defines.</p>
 </div></blockquote>
-<p>Kwargs:</p>
-<blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>globe - An optional <a class="reference internal" href="#cartopy.crs.Globe" title="cartopy.crs.Globe"><tt class="xref py py-class docutils literal"><span class="pre">Globe</span></tt></a>.</dt>
-<dd><p class="first last">If omitted, a default instance is created.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<p><strong>globe</strong> : <a class="reference internal" href="#cartopy.crs.Globe" title="cartopy.crs.Globe"><tt class="xref py py-class docutils literal"><span class="pre">Globe</span></tt></a> instance, optional</p>
+<blockquote class="last">
+<div><p>If omitted, the default Globe instance will be created.
+See <a class="reference internal" href="#cartopy.crs.Globe" title="cartopy.crs.Globe"><tt class="xref py py-class docutils literal"><span class="pre">Globe</span></tt></a> for details.</p>
 </div></blockquote>
-<p>Note:</p>
-<blockquote>
-<div>The contents of proj4_params take precedence over the
-params describing the globe.</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="data">
 <dt id="CRS.globe">
 <tt class="descname">globe</tt><a class="headerlink" href="#CRS.globe" title="Permalink to this definition">¶</a></dt>
@@ -239,6 +233,7 @@ which represents the reference ellipsoid (i.e. &#8220;wgs84&#8221;).</p>
 <li>flattening - Flattening of the ellipsoid.</li>
 <li>inverse_flattening - Inverse flattening of the ellipsoid.</li>
 <li>towgs84 - Passed through to the Proj4 definition.</li>
+<li>nadgrids - Passed through to the Proj4 definition.</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -252,32 +247,26 @@ all projections in the <a class="reference internal" href="projections.html#cart
 <em class="property">class </em><tt class="descclassname">cartopy.crs.</tt><tt class="descname">Projection</tt><a class="reference internal" href="../_modules/cartopy/crs.html#Projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cartopy.crs.Projection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a projected coordinate system with flat topology and Euclidean
 distance.</p>
-<p>Args:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>proj4_params</strong> : iterable of key-value pairs</p>
 <blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>proj4_params - A dictionary of proj4 valid parameters</dt>
-<dd><p class="first last">required to define the desired CRS.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<div><p>The proj4 parameters required to define the desired CRS.
+The parameters should not describe the desired elliptic model,
+instead create an appropriate Globe instance. The <tt class="docutils literal"><span class="pre">proj4_params</span></tt>
+parameters will override any parameters that the Globe defines.</p>
 </div></blockquote>
-<p>Kwargs:</p>
-<blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>globe - An optional <a class="reference internal" href="#cartopy.crs.Globe" title="cartopy.crs.Globe"><tt class="xref py py-class docutils literal"><span class="pre">Globe</span></tt></a>.</dt>
-<dd><p class="first last">If omitted, a default instance is created.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<p><strong>globe</strong> : <a class="reference internal" href="#cartopy.crs.Globe" title="cartopy.crs.Globe"><tt class="xref py py-class docutils literal"><span class="pre">Globe</span></tt></a> instance, optional</p>
+<blockquote class="last">
+<div><p>If omitted, the default Globe instance will be created.
+See <a class="reference internal" href="#cartopy.crs.Globe" title="cartopy.crs.Globe"><tt class="xref py py-class docutils literal"><span class="pre">Globe</span></tt></a> for details.</p>
 </div></blockquote>
-<p>Note:</p>
-<blockquote>
-<div>The contents of proj4_params take precedence over the
-params describing the globe.</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="cartopy.crs.Projection.project_geometry">
 <tt class="descname">project_geometry</tt><big>(</big><em>geometry</em>, <em>src_crs=None</em><big>)</big><a class="reference internal" href="../_modules/cartopy/crs.html#Projection.project_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cartopy.crs.Projection.project_geometry" title="Permalink to this definition">¶</a></dt>

@@ -19,6 +19,16 @@ Lines and polygons
 
 
 
+	|image_effects_of_the_ellipse|_
+
+
+
+	.. |image_effects_of_the_ellipse| image:: examples/effects_of_the_ellipse_01_00.thumb.png
+
+
+	.. _image_effects_of_the_ellipse: examples/effects_of_the_ellipse.html
+
+
 	|image_feature_creation|_
 
 
@@ -101,6 +111,26 @@ Scalar data
 
 .. container:: gallery_images
 
+
+
+	|image_eyja_volcano|_
+
+
+
+	.. |image_eyja_volcano| image:: examples/eyja_volcano_01_00.thumb.png
+
+
+	.. _image_eyja_volcano: examples/eyja_volcano.html
+
+
+	|image_geostationary|_
+
+
+
+	.. |image_geostationary| image:: examples/geostationary_01_00.thumb.png
+
+
+	.. _image_geostationary: examples/geostationary.html
 
 
 	|image_waves|_

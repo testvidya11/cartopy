@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What’s new in cartopy 0.8 &mdash; cartopy 0.8.0 documentation</title>
+    <title>What’s new in cartopy 0.9 &mdash; cartopy 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.8.0',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="cartopy 0.8.0 documentation" href="index.html" />
+    <link rel="top" title="cartopy 0.9.0 documentation" href="index.html" />
     <link rel="next" title="Building cartopy from source" href="building_from_source/index.html" />
     <link rel="prev" title="Introduction" href="index.html" />
  
@@ -71,7 +71,8 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">What&#8217;s new in cartopy 0.8</a></li>
+<li><a class="reference internal" href="#">What&#8217;s new in cartopy 0.9</a></li>
+<li><a class="reference internal" href="#what-s-new-in-cartopy-0-8">What&#8217;s new in cartopy 0.8</a></li>
 <li><a class="reference internal" href="#what-s-new-in-cartopy-0-7">What&#8217;s new in cartopy 0.7</a></li>
 <li><a class="reference internal" href="#what-s-new-in-cartopy-0-6">What&#8217;s new in cartopy 0.6</a><ul>
 <li><a class="reference internal" href="#development-plans-for-cartopy-0-7-and-beyond">Development plans for cartopy 0.7 and beyond</a></li>
@@ -123,7 +124,52 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="what-s-new-in-cartopy-0-8">
+  <div class="section" id="what-s-new-in-cartopy-0-9">
+<h1>What&#8217;s new in cartopy 0.9<a class="headerlink" href="#what-s-new-in-cartopy-0-9" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.9.0</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">12 September 2013</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p class="first">We are very pleased to announce that Bill Little was added to the cartopy
+core development team. Bill has made some excellent contributions to cartopy,
+and <a class="reference external" href="https://www.euroscipy.org/schedule/presentation/35/">his presentation at EuroScipy&#8216;13 on
+&#8220;Iris &amp; Cartopy&#8221;</a>
+was voted best talk of the conference.</p>
+</li>
+<li><p class="first">Other talks and tutorials during this release cycle include Phil Elson&#8217;s <a class="reference external" href="http://conference.scipy.org/scipy2013/presentation_detail.php?id=132">talk at SciPy&#8216;13
+(with video)</a>,
+<a class="reference external" href="https://www.euroscipy.org/schedule/presentation/27/">Thomas Lecocq&#8217;s tutorial at EuroSciPy</a>
+and a forthcoming <a class="reference external" href="http://2013.foss4g.org/conf/programme/presentations/29/">talk at FOSS4G</a>.</p>
+</li>
+<li><p class="first">Christoph Gohlke updated cartopy to support Windows 7.</p>
+</li>
+<li><p class="first">The Plate Carree projection was updated to fully handle arbitrary globe definitions.</p>
+</li>
+<li><p class="first">Peter Killick updated the Mercator class&#8217; default globe to WGS84. His refactor paved the way
+for some follow on work to fully implement the Google Spherical Mercator (EPSG:3857) projection.</p>
+<blockquote>
+<div><p><a class="reference external" href="examples/eyja_volcano.html"><img alt="image_eyja_volcano" src="examples/eyja_volcano_01_00.thumb.png" /></a></p>
+</div></blockquote>
+</li>
+<li><p class="first">The TransverseMercator class saw a tidy up to include several common arguments (<a class="reference external" href="https://github.com/SciTools/cartopy/issues/309">ticket</a>)</p>
+</li>
+<li><p class="first">Bill Little added the Geostationary projection to allow geolocation of satellite imagery.</p>
+<blockquote>
+<div><p><a class="reference external" href="examples/geostationary.html"><img alt="image_geostationary" src="examples/geostationary_01_00.thumb.png" /></a></p>
+</div></blockquote>
+</li>
+<li><p class="first">Byron Blay added the <a class="reference internal" href="crs/projections.html#cartopy.crs.LambertConformal" title="cartopy.crs.LambertConformal"><tt class="xref py py-class docutils literal"><span class="pre">Lambert</span> <span class="pre">conformal</span> <span class="pre">conic</span> <span class="pre">projection</span></tt></a>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="what-s-new-in-cartopy-0-8">
 <h1>What&#8217;s new in cartopy 0.8<a class="headerlink" href="#what-s-new-in-cartopy-0-8" title="Permalink to this headline">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

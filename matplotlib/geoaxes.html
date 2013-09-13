@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cartopy matplotlib integration reference document &mdash; cartopy 0.8.0 documentation</title>
+    <title>Cartopy matplotlib integration reference document &mdash; cartopy 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.8.0',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="cartopy 0.8.0 documentation" href="../index.html" />
+    <link rel="top" title="cartopy 0.9.0 documentation" href="../index.html" />
     <link rel="up" title="Using cartopy with matplotlib" href="intro.html" />
     <link rel="next" title="Cartopy map gridlines and tick labels" href="gridliner.html" />
     <link rel="prev" title="More advanced mapping with cartopy and matplotlib" href="advanced_plotting.html" />
@@ -117,9 +117,9 @@ submitted back to the matplotlib project).</p>
 <dl class="class">
 <dt id="cartopy.mpl.geoaxes.GeoAxes">
 <em class="property">class </em><tt class="descclassname">cartopy.mpl.geoaxes.</tt><tt class="descname">GeoAxes</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cartopy/mpl/geoaxes.html#GeoAxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cartopy.mpl.geoaxes.GeoAxes" title="Permalink to this definition">¶</a></dt>
-<dd><p>A subclass of <a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt></a> which represents a
+<dd><p>A subclass of <a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt></a> which represents a
 map <a class="reference internal" href="../crs/index.html#cartopy.crs.Projection" title="cartopy.crs.Projection"><tt class="xref py py-class docutils literal"><span class="pre">Projection</span></tt></a>.</p>
-<p>This class replaces the matplotlib <a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">Axes</span></tt></a> class
+<p>This class replaces the matplotlib <a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Axes</span></tt></a> class
 when created with the <em>projection</em> keyword. For example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Set up a standard map for latlon data.</span>
 <span class="n">geo_axes</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -137,7 +137,7 @@ transformed from source coordinates to the target projection. For example:</p>
 </pre></div>
 </div>
 <p>Create a GeoAxes object using standard matplotlib
-<a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">Axes</span></tt></a> args and kwargs.</p>
+<a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Axes</span></tt></a> args and kwargs.</p>
 <p>Kwargs:</p>
 <blockquote>
 <div><ul>
@@ -150,7 +150,7 @@ transformed from source coordinates to the target projection. For example:</p>
 </ul>
 </div></blockquote>
 <p>All other args and keywords are passed through to
-<a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt></a>.</p>
+<a class="reference external" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">matplotlib.axes.Axes</span></tt></a>.</p>
 <dl class="method">
 <dt id="cartopy.mpl.geoaxes.GeoAxes.add_feature">
 <tt class="descname">add_feature</tt><big>(</big><em>feature</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cartopy/mpl/geoaxes.html#GeoAxes.add_feature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cartopy.mpl.geoaxes.GeoAxes.add_feature" title="Permalink to this definition">¶</a></dt>
@@ -225,6 +225,12 @@ are <tt class="xref py py-class docutils literal"><span class="pre">cartopy.io.i
 <tt class="xref py py-class docutils literal"><span class="pre">cartopy.io.image_tiles.GoogleTiles</span></tt>.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="cartopy.mpl.geoaxes.GeoAxes.background_patch">
+<tt class="descname">background_patch</tt><em class="property"> = None</em><a class="headerlink" href="#cartopy.mpl.geoaxes.GeoAxes.background_patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>The patch that provides the filled background of the projection.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="cartopy.mpl.geoaxes.GeoAxes.coastlines">
 <tt class="descname">coastlines</tt><big>(</big><em>resolution='110m'</em>, <em>color='black'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cartopy/mpl/geoaxes.html#GeoAxes.coastlines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cartopy.mpl.geoaxes.GeoAxes.coastlines" title="Permalink to this definition">¶</a></dt>
@@ -286,17 +292,17 @@ Default is <a class="reference internal" href="../crs/projections.html#cartopy.c
 <blockquote>
 <div>A <a class="reference internal" href="gridliner.html#cartopy.mpl.gridliner.Gridliner" title="cartopy.mpl.gridliner.Gridliner"><tt class="xref py py-class docutils literal"><span class="pre">cartopy.mpl.gridliner.Gridliner</span></tt></a> instance.</div></blockquote>
 <p>All other keywords control line properties.  These are passed through
-to <a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.Collection" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">matplotlib.collections.Collection</span></tt></a>.</p>
+to <a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.Collection" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">matplotlib.collections.Collection</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="cartopy.mpl.geoaxes.GeoAxes.natural_earth_shp">
 <tt class="descname">natural_earth_shp</tt><big>(</big><em>name='land'</em>, <em>resolution='110m'</em>, <em>category='physical'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/cartopy/mpl/geoaxes.html#GeoAxes.natural_earth_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cartopy.mpl.geoaxes.GeoAxes.natural_earth_shp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds the geometries from the specified Natural Earth shapefile to the
-Axes as a <a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.PathCollection" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">PathCollection</span></tt></a>.</p>
+Axes as a <a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.PathCollection" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">PathCollection</span></tt></a>.</p>
 <p><tt class="docutils literal"><span class="pre">**kwargs</span></tt> are passed through to the
-<a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.PathCollection" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">PathCollection</span></tt></a> constructor.</p>
-<p>Returns the created <a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.PathCollection" title="(in Matplotlib v1.2.1)"><tt class="xref py py-class docutils literal"><span class="pre">PathCollection</span></tt></a>.</p>
+<a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.PathCollection" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">PathCollection</span></tt></a> constructor.</p>
+<p>Returns the created <a class="reference external" href="http://matplotlib.org/api/collections_api.html#matplotlib.collections.PathCollection" title="(in Matplotlib v1.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">PathCollection</span></tt></a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Currently no clipping is done on the geometries before adding them
@@ -304,6 +310,18 @@ to the axes. This means, if very high resolution geometries are
 being used, performance is likely to be severely effected. This
 should be resolved transparently by v0.5.</p>
 </div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cartopy.mpl.geoaxes.GeoAxes.outline_patch">
+<tt class="descname">outline_patch</tt><em class="property"> = None</em><a class="headerlink" href="#cartopy.mpl.geoaxes.GeoAxes.outline_patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>The patch that provides the line bordering the projection.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cartopy.mpl.geoaxes.GeoAxes.projection">
+<tt class="descname">projection</tt><em class="property"> = None</em><a class="headerlink" href="#cartopy.mpl.geoaxes.GeoAxes.projection" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="../crs/index.html#cartopy.crs.Projection" title="cartopy.crs.Projection"><tt class="xref py py-class docutils literal"><span class="pre">cartopy.crs.Projection</span></tt></a> of this GeoAxes.</p>
 </dd></dl>
 
 <dl class="method">
@@ -352,16 +370,14 @@ Isles.</p>
 <dt>crs - An instance of <a class="reference internal" href="../crs/index.html#cartopy.crs.CRS" title="cartopy.crs.CRS"><tt class="xref py py-class docutils literal"><span class="pre">CRS</span></tt></a> indicating the</dt>
 <dd><p class="first last">coordinate system of the provided tick values. If no
 coordinate system is specified then the values are assumed
-to be in the coordinate system of the projection.</p>
+to be in the coordinate system of the projection.
+Only transformations from one rectangular coordinate system
+to another rectangular coordinate system are supported.</p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This method is limited to cylindrical projections.</p>
-</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This interface is subject to change whilst functionality is added
@@ -392,16 +408,14 @@ to support other map projections.</p>
 <dt>crs - An instance of <a class="reference internal" href="../crs/index.html#cartopy.crs.CRS" title="cartopy.crs.CRS"><tt class="xref py py-class docutils literal"><span class="pre">CRS</span></tt></a> indicating the</dt>
 <dd><p class="first last">coordinate system of the provided tick values. If no
 coordinate system is specified then the values are assumed
-to be in the coordinate system of the projection.</p>
+to be in the coordinate system of the projection.
+Only transformations from one rectangular coordinate system
+to another rectangular coordinate system are supported.</p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This method is limited to cylindrical projections.</p>
-</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This interface is subject to change whilst functionality is added

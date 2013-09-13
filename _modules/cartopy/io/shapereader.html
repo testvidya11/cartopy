@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cartopy.io.shapereader &mdash; cartopy 0.8.0 documentation</title>
+    <title>cartopy.io.shapereader &mdash; cartopy 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.8.0',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../../copyright.html" />
-    <link rel="top" title="cartopy 0.8.0 documentation" href="../../../index.html" />
+    <link rel="top" title="cartopy 0.9.0 documentation" href="../../../index.html" />
     <link rel="up" title="cartopy.io" href="../io.html" />
  
 
@@ -132,6 +132,7 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">    &lt;class &#39;shapely.geometry.point.Point&#39;&gt;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -482,10 +483,10 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;.shp&#39;</span><span class="p">,</span> <span class="s">&#39;.dbf&#39;</span><span class="p">,</span> <span class="s">&#39;.shx&#39;</span><span class="p">]:</span>
             <span class="k">yield</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;GSHHS_shp&#39;</span><span class="p">,</span> <span class="s">&#39;{scale}&#39;</span><span class="p">,</span>
-                                <span class="s">&#39;GSHHS_{scale}_L{level}{extension}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">extension</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="o">**</span><span class="n">format_dict</span><span class="p">))</span>
+                                <span class="s">&#39;GSHHS_{scale}_L{level}{extension}&#39;</span>
+                                <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="o">**</span><span class="n">format_dict</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">aqcuire_all_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">acquire_all_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_dict</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">cStringIO</span> <span class="kn">as</span> <span class="nn">StringIO</span>
         <span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 
@@ -520,12 +521,25 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">        Downloads the zip file and extracts the files listed in</span>
 <span class="sd">        :meth:`zip_file_contents` to the target path.</span>
 
+<span class="sd">        .. note:</span>
+
+<span class="sd">            Because some of the GSHSS data is available with the cartopy</span>
+<span class="sd">            repository, scales of &quot;l&quot; or &quot;c&quot; will not be downloaded if they</span>
+<span class="sd">            exist in the ``cartopy.config[&#39;repo_data_dir&#39;]`` directory.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aqcuire_all_resources</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
+        <span class="n">repo_fname_pattern</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;repo_data_dir&#39;</span><span class="p">],</span>
+                                          <span class="s">&#39;shapefiles&#39;</span><span class="p">,</span> <span class="s">&#39;gshhs&#39;</span><span class="p">,</span> <span class="s">&#39;{scale}&#39;</span><span class="p">,</span>
+                                          <span class="s">&#39;GSHHS_{scale}_L?.shp&#39;</span><span class="p">)</span>
+        <span class="n">repo_fname_pattern</span> <span class="o">=</span> <span class="n">repo_fname_pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">format_dict</span><span class="p">)</span>
+        <span class="n">repo_fnames</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">repo_fname_pattern</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">repo_fnames</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">repo_fnames</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;&gt;1 repo files found for GSHHS&#39;</span>
+            <span class="k">return</span> <span class="n">repo_fnames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acquire_all_resources</span><span class="p">(</span><span class="n">format_dict</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">target_path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Failed to download and extract GSHHS &#39;</span>
                                <span class="s">&#39;shapefile to {!r}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_path</span><span class="p">))</span>
-
         <span class="k">return</span> <span class="n">target_path</span>
 
     <span class="nd">@staticmethod</span>

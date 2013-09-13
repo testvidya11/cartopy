@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cartopy.mpl.geoaxes &mdash; cartopy 0.8.0 documentation</title>
+    <title>cartopy.mpl.geoaxes &mdash; cartopy 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.8.0',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../../copyright.html" />
-    <link rel="top" title="cartopy 0.8.0 documentation" href="../../../index.html" />
+    <link rel="top" title="cartopy 0.9.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
  
 
@@ -111,10 +111,12 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">plot results from source coordinates to the GeoAxes&#39; target projection.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">weakref</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.artist</span>
 <span class="kn">import</span> <span class="nn">matplotlib.axes</span>
 <span class="kn">from</span> <span class="nn">matplotlib.image</span> <span class="kn">import</span> <span class="n">imread</span>
 <span class="kn">import</span> <span class="nn">matplotlib.transforms</span> <span class="kn">as</span> <span class="nn">mtransforms</span>
@@ -127,8 +129,9 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
 <span class="kn">import</span> <span class="nn">cartopy.feature</span>
 <span class="kn">import</span> <span class="nn">cartopy.img_transform</span>
+<span class="kn">from</span> <span class="nn">cartopy.mpl.clip_path</span> <span class="kn">import</span> <span class="n">clip_path</span>
 <span class="kn">import</span> <span class="nn">cartopy.mpl.feature_artist</span> <span class="kn">as</span> <span class="nn">feature_artist</span>
-<span class="kn">import</span> <span class="nn">cartopy.mpl.patch</span> <span class="kn">as</span> <span class="nn">patch</span>
+<span class="kn">import</span> <span class="nn">cartopy.mpl.patch</span> <span class="kn">as</span> <span class="nn">cpatch</span>
 
 
 <span class="k">assert</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="s">&#39;1.2&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;Cartopy can only work with &#39;</span>
@@ -246,8 +249,8 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
         <span class="c"># This is a cartopy extension to the Transform API to allow finer</span>
         <span class="c"># control of Path orientation handling (Path ordering is not important</span>
         <span class="c"># in matplotlib, but is in Cartopy).</span>
-        <span class="n">geoms</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">path_to_geos</span><span class="p">(</span><span class="n">src_path</span><span class="p">,</span>
-                                   <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;force_path_ccw&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+        <span class="n">geoms</span> <span class="o">=</span> <span class="n">cpatch</span><span class="o">.</span><span class="n">path_to_geos</span><span class="p">(</span><span class="n">src_path</span><span class="p">,</span>
+                                    <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;force_path_ccw&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">geoms</span><span class="p">:</span>
             <span class="n">proj_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_projection</span><span class="o">.</span><span class="n">project_geometry</span><span class="p">(</span>
@@ -257,11 +260,11 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">transformed_geoms</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">mpath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">paths</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">geos_to_path</span><span class="p">(</span><span class="n">transformed_geoms</span><span class="p">)</span>
+            <span class="n">paths</span> <span class="o">=</span> <span class="n">cpatch</span><span class="o">.</span><span class="n">geos_to_path</span><span class="p">(</span><span class="n">transformed_geoms</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">paths</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">mpath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
-            <span class="n">points</span><span class="p">,</span> <span class="n">codes</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">patch</span><span class="o">.</span><span class="n">path_segments</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">curves</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                                                      <span class="n">simplify</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">points</span><span class="p">,</span> <span class="n">codes</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">cpatch</span><span class="o">.</span><span class="n">path_segments</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">curves</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                                       <span class="n">simplify</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
                                   <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">])</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">mpath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                                 <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">codes</span><span class="p">))</span>
@@ -323,6 +326,14 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;map_projection&#39;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;The :class:`cartopy.crs.Projection` of this GeoAxes.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">outline_patch</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="sd">&quot;&quot;&quot;The patch that provides the line bordering the projection.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">background_patch</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="sd">&quot;&quot;&quot;The patch that provides the filled background of the projection.&quot;&quot;&quot;</span>
+
         <span class="nb">super</span><span class="p">(</span><span class="n">GeoAxes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gridliners</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">img_factories</span> <span class="o">=</span> <span class="p">[]</span>
@@ -348,7 +359,7 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
         <span class="c"># XXX TODO: Needs working on</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">img_factories</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">factory</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">])</span>
 </div>
-    <span class="nd">@matplotlib.axes.allow_rasterization</span>
+    <span class="nd">@matplotlib.artist.allow_rasterization</span>
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inframe</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extends the standard behaviour of :func:`matplotlib.axes.Axes.draw`.</span>
@@ -358,6 +369,12 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">        been set.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">reclip</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_patch</span><span class="o">.</span><span class="n">reclip</span><span class="p">:</span>
+            <span class="n">clipped_path</span> <span class="o">=</span> <span class="n">clip_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">orig_path</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">viewLim</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">clipped_path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background_patch</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">clipped_path</span>
+
         <span class="c"># if no data has been added, and no extents set, then make the</span>
         <span class="c"># map global</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_existing_data_limits</span> <span class="ow">and</span> \
@@ -553,7 +570,7 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Approximating coordinate system {!r} with a &#39;</span>
                               <span class="s">&#39;RotatedPole projection.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crs</span><span class="p">))</span>
             <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">crs</span><span class="p">,</span> <span class="s">&#39;is_geodetic&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">crs</span><span class="o">.</span><span class="n">is_geodetic</span><span class="p">():</span>
-                <span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+                <span class="n">proj</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="n">crs</span><span class="o">.</span><span class="n">globe</span><span class="p">)</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Approximating coordinate system {!r} with the &#39;</span>
                               <span class="s">&#39;PlateCarree projection.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crs</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
@@ -647,10 +664,8 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">                    coordinate system of the provided tick values. If no</span>
 <span class="sd">                    coordinate system is specified then the values are assumed</span>
 <span class="sd">                    to be in the coordinate system of the projection.</span>
-
-<span class="sd">        .. note::</span>
-
-<span class="sd">            This method is limited to cylindrical projections.</span>
+<span class="sd">                    Only transformations from one rectangular coordinate system</span>
+<span class="sd">                    to another rectangular coordinate system are supported.</span>
 
 <span class="sd">        .. note::</span>
 
@@ -658,24 +673,24 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">            to support other map projections.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="p">(</span><span class="n">ccrs</span><span class="o">.</span><span class="n">_RectangularProjection</span><span class="p">,</span>
-                                            <span class="n">ccrs</span><span class="o">.</span><span class="n">_CylindricalProjection</span><span class="p">,</span>
-                                            <span class="n">ccrs</span><span class="o">.</span><span class="n">OSGB</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Cannot set xticks for not-cylindrical &#39;</span>
-                               <span class="s">&#39;coordinate systems.&#39;</span><span class="p">)</span>
-
-        <span class="c"># Switch on drawing of x axis</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-
         <span class="c"># Project ticks if crs differs from axes&#39; projection</span>
         <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">crs</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">crs</span><span class="p">,</span> <span class="p">(</span><span class="n">ccrs</span><span class="o">.</span><span class="n">_RectangularProjection</span><span class="p">,</span>
+                                    <span class="n">ccrs</span><span class="o">.</span><span class="n">Mercator</span><span class="p">))</span> <span class="ow">or</span> \
+                    <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span>
+                                   <span class="p">(</span><span class="n">ccrs</span><span class="o">.</span><span class="n">_RectangularProjection</span><span class="p">,</span>
+                                    <span class="n">ccrs</span><span class="o">.</span><span class="n">Mercator</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Cannot handle non-rectangular coordinate &#39;</span>
+                                   <span class="s">&#39;systems.&#39;</span><span class="p">)</span>
             <span class="n">proj_xyz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">transform_points</span><span class="p">(</span><span class="n">crs</span><span class="p">,</span>
                                                         <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ticks</span><span class="p">),</span>
-                                                        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ticks</span><span class="p">))</span>
-                                                        <span class="p">)</span>
+                                                        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ticks</span><span class="p">)))</span>
             <span class="n">xticks</span> <span class="o">=</span> <span class="n">proj_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">xticks</span> <span class="o">=</span> <span class="n">ticks</span>
+
+        <span class="c"># Switch on drawing of x axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">GeoAxes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span><span class="p">,</span> <span class="n">minor</span><span class="p">)</span>
 </div>
@@ -696,10 +711,8 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">                    coordinate system of the provided tick values. If no</span>
 <span class="sd">                    coordinate system is specified then the values are assumed</span>
 <span class="sd">                    to be in the coordinate system of the projection.</span>
-
-<span class="sd">        .. note::</span>
-
-<span class="sd">            This method is limited to cylindrical projections.</span>
+<span class="sd">                    Only transformations from one rectangular coordinate system</span>
+<span class="sd">                    to another rectangular coordinate system are supported.</span>
 
 <span class="sd">        .. note::</span>
 
@@ -707,24 +720,24 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 <span class="sd">            to support other map projections.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="p">(</span><span class="n">ccrs</span><span class="o">.</span><span class="n">_RectangularProjection</span><span class="p">,</span>
-                                            <span class="n">ccrs</span><span class="o">.</span><span class="n">_CylindricalProjection</span><span class="p">,</span>
-                                            <span class="n">ccrs</span><span class="o">.</span><span class="n">OSGB</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Cannot set yticks for non-cylindrical &#39;</span>
-                               <span class="s">&#39;coordinate systems.&#39;</span><span class="p">)</span>
-
-        <span class="c"># Switch on drawing of y axis</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-
         <span class="c"># Project ticks if crs differs from axes&#39; projection</span>
         <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">crs</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
-            <span class="n">prj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span>
-            <span class="n">proj_xyz</span> <span class="o">=</span> <span class="n">prj</span><span class="o">.</span><span class="n">transform_points</span><span class="p">(</span><span class="n">crs</span><span class="p">,</span>
-                                            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ticks</span><span class="p">)),</span>
-                                            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ticks</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">crs</span><span class="p">,</span> <span class="p">(</span><span class="n">ccrs</span><span class="o">.</span><span class="n">_RectangularProjection</span><span class="p">,</span>
+                                    <span class="n">ccrs</span><span class="o">.</span><span class="n">Mercator</span><span class="p">))</span> <span class="ow">or</span> \
+                    <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span>
+                                   <span class="p">(</span><span class="n">ccrs</span><span class="o">.</span><span class="n">_RectangularProjection</span><span class="p">,</span>
+                                    <span class="n">ccrs</span><span class="o">.</span><span class="n">Mercator</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Cannot handle non-rectangular coordinate &#39;</span>
+                                   <span class="s">&#39;systems.&#39;</span><span class="p">)</span>
+            <span class="n">proj_xyz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">transform_points</span><span class="p">(</span><span class="n">crs</span><span class="p">,</span>
+                                                        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ticks</span><span class="p">)),</span>
+                                                        <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ticks</span><span class="p">))</span>
             <span class="n">yticks</span> <span class="o">=</span> <span class="n">proj_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">yticks</span> <span class="o">=</span> <span class="n">ticks</span>
+
+        <span class="c"># Switch on drawing of y axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">GeoAxes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">,</span> <span class="n">minor</span><span class="p">)</span>
 </div>
@@ -742,10 +755,8 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s">&quot;repo_data_dir&quot;</span><span class="p">],</span>
                                  <span class="s">&#39;raster&#39;</span><span class="p">,</span> <span class="s">&#39;natural_earth&#39;</span><span class="p">,</span>
                                  <span class="s">&#39;50-natural-earth-1-downsampled.png&#39;</span><span class="p">)</span>
-            <span class="n">img_origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">img_origin</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">source_proj</span><span class="p">,</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">imread</span><span class="p">(</span><span class="n">fname</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>
+                               <span class="n">transform</span><span class="o">=</span><span class="n">source_proj</span><span class="p">,</span>
                                <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Unknown stock image </span><span class="si">%r</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
@@ -754,29 +765,37 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add the &quot;transform&quot; keyword to :func:`~matplotlib.pyplot.imshow&#39;.</span>
 
-<span class="sd">        Extra kwargs:</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
-<span class="sd">            transform - a :class:`~cartopy.crs.Projection`.</span>
-
-<span class="sd">            regrid_shape - default is (750, 375). But may be changed to &quot;auto&quot;</span>
-<span class="sd">                           in the future...</span>
-
-<span class="sd">            extent = (left, right, bottom, top) - transform coordinates for</span>
-<span class="sd">                                                  the extent of the source</span>
-<span class="sd">                                                  image.</span>
-
-<span class="sd">            target_extent = (left, right, bottom, top) - native coordinates</span>
-<span class="sd">                                                         for the extent of</span>
-<span class="sd">                                                         the desired image.</span>
-
-<span class="sd">            origin - default is changed to &#39;lower&#39;</span>
-
-<span class="sd">            update_datalim - flag whether the image should affect the data</span>
-<span class="sd">                             limits (default: True)</span>
+<span class="sd">        transform : :class:`~cartopy.crs.Projection` or matplotlib transform</span>
+<span class="sd">            The coordinate system in which the given image is rectangular.</span>
+<span class="sd">        regrid_shape : int or pair of ints</span>
+<span class="sd">            The shape of the desired image if it needs to be transformed.</span>
+<span class="sd">            If a single integer is given then that will be used as the minimum</span>
+<span class="sd">            length dimension, while the other dimension will be scaled up</span>
+<span class="sd">            according to the target extent&#39;s aspect ratio. The default is for</span>
+<span class="sd">            the minimum dimension of a transformed image to have length 750,</span>
+<span class="sd">            so for an image being transformed into a global PlateCarree</span>
+<span class="sd">            projection the resulting transformed image would have a shape of</span>
+<span class="sd">            ``(750, 1500)``.</span>
+<span class="sd">        extent : tuple</span>
+<span class="sd">            The corner coordinates of the image in the form</span>
+<span class="sd">            ``(left, right, bottom, top)``. The coordinates should be in the</span>
+<span class="sd">            coordinate system passed to the transform keyword.</span>
+<span class="sd">        target_extent : tuple</span>
+<span class="sd">            The corner coordinate of the desired image in the form</span>
+<span class="sd">            ``(left, right, bottom, top)``. The coordinates should be in the</span>
+<span class="sd">            coordinate system passed to the transform keyword.</span>
+<span class="sd">        origin : {&#39;lower&#39;, &#39;upper&#39;}</span>
+<span class="sd">            The origin of the vertical pixels. See</span>
+<span class="sd">            :func:`matplotlib.pyplot.imshow` for further details. Default</span>
+<span class="sd">            is ``&#39;lower&#39;``.</span>
+<span class="sd">        update_datalim : bool</span>
+<span class="sd">            Whether the image should affect the data limits. Default to True.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">transform</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;transform&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="n">regrid_shape</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;regrid_shape&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">750</span><span class="p">,</span> <span class="mi">375</span><span class="p">))</span>
         <span class="n">update_datalim</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;update_datalim&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
 
         <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;origin&#39;</span><span class="p">,</span> <span class="s">&#39;lower&#39;</span><span class="p">)</span>
@@ -794,14 +813,24 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
             <span class="n">result</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">extent</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;extent&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">Projection</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Expected a projection subclass. Cannot &#39;</span>
                                  <span class="s">&#39;handle a </span><span class="si">%s</span><span class="s"> in imshow.&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">))</span>
 
-            <span class="n">warp_array</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">img_transform</span><span class="o">.</span><span class="n">warp_array</span>
             <span class="n">target_extent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
-            <span class="c"># XXX adaptive resolution depending on incoming img?</span>
+            <span class="n">regrid_shape</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;regrid_shape&#39;</span><span class="p">,</span> <span class="mi">750</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">regrid_shape</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+                <span class="n">target_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">regrid_shape</span><span class="p">)</span>
+                <span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">target_extent</span><span class="p">)[::</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">desired_aspect</span> <span class="o">=</span> <span class="n">x_range</span> <span class="o">/</span> <span class="n">y_range</span>
+                <span class="k">if</span> <span class="n">x_range</span> <span class="o">&gt;=</span> <span class="n">y_range</span><span class="p">:</span>
+                    <span class="n">regrid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_size</span> <span class="o">*</span> <span class="n">desired_aspect</span><span class="p">,</span> <span class="n">target_size</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">regrid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_size</span><span class="p">,</span> <span class="n">target_size</span> <span class="o">/</span> <span class="n">desired_aspect</span><span class="p">)</span>
+
+            <span class="n">warp_array</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">img_transform</span><span class="o">.</span><span class="n">warp_array</span>
             <span class="n">img</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">warp_array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span>
                                      <span class="n">source_proj</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
                                      <span class="n">source_extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
@@ -809,17 +838,20 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
                                      <span class="n">target_res</span><span class="o">=</span><span class="n">regrid_shape</span><span class="p">,</span>
                                      <span class="n">target_extent</span><span class="o">=</span><span class="n">target_extent</span><span class="p">,</span>
                                      <span class="p">)</span>
-            <span class="c"># as a workaround to a matplotlib limitation, turn any images</span>
+
+            <span class="c"># As a workaround to a matplotlib limitation, turn any images</span>
             <span class="c"># which are RGB with a mask into RGBA images with an alpha</span>
             <span class="c"># channel.</span>
             <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)</span> <span class="ow">and</span>
                     <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">)</span> <span class="ow">and</span>
                     <span class="n">img</span><span class="o">.</span><span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">False</span><span class="p">):</span>
                 <span class="n">old_img</span> <span class="o">=</span> <span class="n">img</span>
-                <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="p">))</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
                 <span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">old_img</span>
-                <span class="c"># put an alpha channel in if the image was masked</span>
+                <span class="c"># Put an alpha channel in if the image was masked.</span>
                 <span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">~</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">old_img</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s">&#39;u&#39;</span><span class="p">:</span>
+                    <span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">255</span>
 
             <span class="n">result</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
                                                  <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -881,49 +913,60 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
 
     <span class="k">def</span> <span class="nf">_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adds the map&#39;s boundary.</span>
+<span class="sd">        Adds the map&#39;s boundary to this GeoAxes, attaching the appropriate</span>
+<span class="sd">        artists to :data:`.outline_patch` and :data:`.background_patch`.</span>
 
-<span class="sd">        Note:</span>
+<span class="sd">        .. note::</span>
 
-<span class="sd">            The boundary is not the axes.patch, which provides rectilinear</span>
-<span class="sd">            clipping for all of the map&#39;s artists.</span>
+<span class="sd">            The boundary is not the ``axes.patch``. ``axes.patch``</span>
+<span class="sd">            is made invisible by this method - its only remaining</span>
+<span class="sd">            purpose is to provide a rectilinear clip patch for</span>
+<span class="sd">            all Axes artists.</span>
 
-<span class="sd">        The axes.patch will have its visibility set to False inside</span>
-<span class="sd">        GeoAxes.gca()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">cartopy.mpl.patch</span> <span class="kn">as</span> <span class="nn">p</span>
-        <span class="n">path</span><span class="p">,</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">geos_to_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span>
+        <span class="n">path</span><span class="p">,</span> <span class="o">=</span> <span class="n">cpatch</span><span class="o">.</span><span class="n">geos_to_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span>
 
-<span class="c">#        from matplotlib.collections import PatchCollection</span>
+        <span class="c"># Get the outline path in terms of self.transData</span>
+        <span class="n">proj_to_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">_as_mpl_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transData</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">proj_to_data</span><span class="o">.</span><span class="n">transform_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-        <span class="n">sct</span> <span class="o">=</span> <span class="n">SimpleClippedTransform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transScale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transLimits</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+        <span class="n">outline_patch</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">PathPatch</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span>
+                                           <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+                                           <span class="n">zorder</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                           <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transData</span><span class="p">)</span>
 
-        <span class="c"># XXX Should be exactly one path...</span>
-        <span class="n">collection</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">PathPatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                        <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
-                                        <span class="n">zorder</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-                                        <span class="c"># transform=self.transData,</span>
-                                        <span class="n">transform</span><span class="o">=</span><span class="n">sct</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                                        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">outline_patch</span> <span class="o">=</span> <span class="n">collection</span>
-        <span class="c"># XXX autolim = False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+        <span class="n">background_patch</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">PathPatch</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span>
+                                              <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
+                                              <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                              <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transData</span><span class="p">)</span>
 
-        <span class="c"># put a color patch for background color</span>
-        <span class="c"># XXX Should be exactly one path...</span>
-        <span class="n">collection</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">PathPatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                        <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
-                                        <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">sct</span><span class="p">,</span>
-                                        <span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                                        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">background_patch</span> <span class="o">=</span> <span class="n">collection</span>
-        <span class="c"># XXX autolim = False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+        <span class="c"># Attach the original path to the patches. This will be used each time</span>
+        <span class="c"># a new clipped path is calculated.</span>
+        <span class="n">outline_patch</span><span class="o">.</span><span class="n">orig_path</span> <span class="o">=</span> <span class="n">tp</span>
+        <span class="n">background_patch</span><span class="o">.</span><span class="n">orig_path</span> <span class="o">=</span> <span class="n">tp</span>
 
+        <span class="c"># Attach a &quot;reclip&quot; attribute, which determines if the patch&#39;s path is</span>
+        <span class="c"># reclipped before drawing. A callback is used to change the &quot;reclip&quot;</span>
+        <span class="c"># state.</span>
+        <span class="n">outline_patch</span><span class="o">.</span><span class="n">reclip</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">background_patch</span><span class="o">.</span><span class="n">reclip</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="c"># Add the patches to the axes, and also make them available as</span>
+        <span class="c"># attributes.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">outline_patch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outline_patch</span> <span class="o">=</span> <span class="n">outline_patch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">background_patch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background_patch</span> <span class="o">=</span> <span class="n">background_patch</span>
+
+        <span class="c"># Attach callback events for when the xlim or ylim are changed. This</span>
+        <span class="c"># is what triggers the patches to be re-clipped at draw time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;xlim_changed&#39;</span><span class="p">,</span> <span class="n">_trigger_patch_reclip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;ylim_changed&#39;</span><span class="p">,</span> <span class="n">_trigger_patch_reclip</span><span class="p">)</span>
+
+        <span class="c"># Hide the old &quot;background&quot; patch. It is not used by GeoAxes.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_linewidth</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
 
     <span class="c"># mpl 1.2.0rc2 compatibility. To be removed once 1.2 is released</span>
     <span class="k">def</span> <span class="nf">contour</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1206,17 +1249,19 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
                         <span class="n">pcolor_data</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">pcolor_data</span><span class="o">.</span><span class="n">mask</span> <span class="o">|</span> <span class="n">C_mask</span>
 
                     <span class="n">pts</span> <span class="o">=</span> <span class="n">pts</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">Ny</span><span class="p">,</span> <span class="n">Nx</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-                    <span class="n">pcolor_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                                             <span class="n">pcolor_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                    <span class="n">pcolor_col</span><span class="o">.</span><span class="n">set_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
-                    <span class="n">pcolor_col</span><span class="o">.</span><span class="n">set_norm</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
-                    <span class="n">pcolor_col</span><span class="o">.</span><span class="n">set_clim</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span>
-                    <span class="c"># scale the data according to the *original* data</span>
-                    <span class="n">pcolor_col</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">autoscale_None</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="o">~</span><span class="n">pcolor_data</span><span class="o">.</span><span class="n">mask</span><span class="p">):</span>
+                        <span class="n">pcolor_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                                                 <span class="n">pcolor_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                        <span class="n">pcolor_col</span><span class="o">.</span><span class="n">set_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+                        <span class="n">pcolor_col</span><span class="o">.</span><span class="n">set_norm</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+                        <span class="n">pcolor_col</span><span class="o">.</span><span class="n">set_clim</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span>
+                        <span class="c"># scale the data according to the *original* data</span>
+                        <span class="n">pcolor_col</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">autoscale_None</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
 
-                    <span class="c"># put the pcolor_col on the pcolormesh collection so that</span>
-                    <span class="c"># if really necessary, users can do things post this method</span>
-                    <span class="n">collection</span><span class="o">.</span><span class="n">_wrapped_collection_fix</span> <span class="o">=</span> <span class="n">pcolor_col</span>
+                        <span class="c"># put the pcolor_col on the pcolormesh collection so</span>
+                        <span class="c"># that if really necessary, users can do things post</span>
+                        <span class="c"># this method</span>
+                        <span class="n">collection</span><span class="o">.</span><span class="n">_wrapped_collection_fix</span> <span class="o">=</span> <span class="n">pcolor_col</span>
 
         <span class="k">return</span> <span class="n">collection</span>
 
@@ -1385,66 +1430,16 @@ border="0" alt="Cartopy" style="margin-left: -60px;"/>
         <span class="k">return</span> <span class="n">collection</span>
 
 </div>
-<span class="k">class</span> <span class="nc">SimpleClippedTransform</span><span class="p">(</span><span class="n">mtransforms</span><span class="o">.</span><span class="n">Transform</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_trigger_patch_reclip</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Transforms the values using a pre transform, clips them, then post</span>
-<span class="sd">    transforms them.</span>
-
-<span class="sd">    This transform should not be widely used, but is useful for transforming</span>
-<span class="sd">    a background patch and clipping the patch to a desired extent.</span>
+<span class="sd">    Defines an event callback for a GeoAxes which forces the outline and</span>
+<span class="sd">    background patches to be re-clipped next time they are drawn.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">input_dims</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">output_dims</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">has_inverse</span> <span class="o">=</span> <span class="bp">True</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pre_clip_transform</span><span class="p">,</span> <span class="n">post_clip_transform</span><span class="p">,</span>
-                 <span class="n">xclip</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">yclip</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create the transform.</span>
-
-<span class="sd">        Args:</span>
-
-<span class="sd">            * pre_clip_transform - A :class:`matplotlib.transforms.Transform`.</span>
-<span class="sd">            * post_clip_transform - A :class:`matplotlib.transforms.Transform`.</span>
-<span class="sd">            * xclip - Defaults to (0,1).</span>
-<span class="sd">            * yclip - Defaults to (0,1).</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">mtransforms</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pre_clip_transform</span> <span class="o">=</span> <span class="n">pre_clip_transform</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">post_clip_transform</span> <span class="o">=</span> <span class="n">post_clip_transform</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">x_clips</span> <span class="o">=</span> <span class="n">xclip</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y_clips</span> <span class="o">=</span> <span class="n">yclip</span>
-
-    <span class="k">def</span> <span class="nf">transform_non_affine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Transforms from source to target coordinates.</span>
-
-<span class="sd">        Args:</span>
-
-<span class="sd">            * value - An (n,2) array of points in source coordinates.</span>
-
-<span class="sd">        Returns:</span>
-
-<span class="sd">            * An (n,2) array of transformed points in target coordinates.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">new_vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_clip_transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">new_vals</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">new_vals</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_clips</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_clips</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_clips</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_clips</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
-        <span class="c"># XXX support ma&#39;s?</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_clip_transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">new_vals</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">inverted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a matplotlib :class:`~matplotlib.transforms.Transform` from</span>
-<span class="sd">        target to source coordinates.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pre_clip_transform</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_clip_transform</span><span class="p">)</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+    <span class="n">axes</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">axes</span>
+    <span class="c"># trigger the outline and background patches to be re-clipped</span>
+    <span class="n">axes</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">reclip</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">axes</span><span class="o">.</span><span class="n">background_patch</span><span class="o">.</span><span class="n">reclip</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 
           </div>
